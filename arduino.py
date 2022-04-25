@@ -45,6 +45,37 @@ def rotateServoClose(servo_pin):
         sleep(0.5 / (i + 0.2))
 
 
+# Iniciando a lógica
+print ("Inicio...")
 
+index = 0 # Variável de repetição do código 
+rotateServoClose(servo_pin) # Iniciar com o servo a 0 graus "fechado"
+
+while index < 10:
+    board.digital[dig_semaforo_vermelho].write(1) # Inciar com o led vermelho ligado
+
+    for i in range(10): # Contar até 10 (de 0 a 9)
+        getDisplayNumber(board, display_pinos, display_digitos, i)
+        sleep(1)
+    
+    getDisplayNumber(board, display_pinos, display_digitos, 0) # Zerar o display
+    board.digital[dig_semaforo_vermelho].write(0) # Apagar led vermelho
+    board.digital[dig_semaforo_amarelo].write(1) # Ligar led amarelo
+    rotateServoOpen(servo_pin) # "Abrir" servo enquanto o led está amarelo
+    sleep(0.8)
+    board.digital[dig_semaforo_amarelo].write(0) # Após abrir o servo apagar o led amarelo
+    board.digital[dig_semaforo_verde].write(1) # Ligar led verde
+
+    for i in range(10): # Contar até 10 (de 0 a 9)
+        getDisplayNumber(board, display_pinos, display_digitos, i)
+        sleep(1)
+
+    rotateServoClose(servo_pin) # "Fechar" o servo
+    board.digital[dig_semaforo_verde].write(0) # Apagar led verde
+    getDisplayNumber(board, display_pinos, display_digitos, 0) # Zerar o display
+    
+    index = index + 1
+
+print ("Fim...")
 
 
